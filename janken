@@ -1,0 +1,61 @@
+<?php
+// ------------------------------
+// 人 vs コンピュータ じゃんけんゲーム
+// ------------------------------
+
+$hands = ["グー", "チョキ", "パー"];
+
+$user_hand = null;
+$cpu_hand = null;
+$result = null;
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $user_hand = intval($_POST["hand"]);
+    $cpu_hand = rand(0, 2);
+
+    // じゃんけん判定
+    if ($user_hand === $cpu_hand) {
+        $result = "あいこです！";
+    } elseif (($user_hand === 0 && $cpu_hand === 1) ||
+              ($user_hand === 1 && $cpu_hand === 2) ||
+              ($user_hand === 2 && $cpu_hand === 0)) {
+        $result = "あなたの勝ち！";
+    } else {
+        $result = "あなたの負け…";
+    }
+}
+?>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>じゃんけんゲーム</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding: 30px; }
+        .result { font-size: 1.5em; margin: 20px; }
+        .box { margin: 10px; font-size: 1.2em; }
+    </style>
+</head>
+<body>
+
+<h1>じゃんけんゲーム</h1>
+
+<form method="post">
+    <div class="box">
+        <label><input type="radio" name="hand" value="0" required> グー</label>
+        <label><input type="radio" name="hand" value="1"> チョキ</label>
+        <label><input type="radio" name="hand" value="2"> パー</label>
+    </div>
+    <button type="submit">勝負！</button>
+</form>
+
+<?php if ($result !== null): ?>
+    <div class="result">
+        <p>あなた：<?= $hands[$user_hand] ?></p>
+        <p>コンピュータ：<?= $hands[$cpu_hand] ?></p>
+        <strong><?= $result ?></strong>
+    </div>
+<?php endif; ?>
+
+</body>
+</html>
